@@ -1,5 +1,7 @@
 const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api/v1').replace(/\/+$/, '');
 const API_URL = API_BASE_URL.endsWith('/api/v1') ? API_BASE_URL : `${API_BASE_URL}/api/v1`;
+let accessTokenVersion = 0;
+let refreshInFlight;
 
 export class ApiError extends Error {
   constructor(message, status = 0) {
@@ -9,7 +11,7 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiRequest(path, { method = 'GET', body } = {}) {
+async function sendRequest(path, { method = 'GET', body } = {}) {
   let response;
   try {
     response = await fetch(`${API_URL}${path}`, {
@@ -30,6 +32,24 @@ export async function apiRequest(path, { method = 'GET', body } = {}) {
     );
   }
   return result;
+}
+
+export async function apiRequest(path, options = {}) {
+  const versionAtRequest = accessTokenVersion;
+  try {
+    return await sendRequest(path, options);
+  } catch (error) {
+    if (error.status !== 401 || path.startsWith('/auth/')) throw error;
+
+    if (accessTokenVersion === versionAtRequest) {
+      refreshInFlight ??= sendRequest('/auth/refresh', { method: 'POST' })
+        .then(() => { accessTokenVersion++; })
+        .finally(() => { refreshInFlight = undefined; });
+      await refreshInFlight;
+    }
+
+    return sendRequest(path, options);
+  }
 }
 
 export async function restoreSession() {
