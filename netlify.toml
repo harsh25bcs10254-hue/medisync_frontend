@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[[redirects]]
+  from = "/api/v1/*"
+  to = "https://medisync-4-hp8u.onrender.com/api/v1/:splat"
+  status = 200
+  force = true
