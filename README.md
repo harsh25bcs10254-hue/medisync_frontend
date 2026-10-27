@@ -67,7 +67,7 @@ Each doctor has seeded appointments to demonstrate the assigned-doctor workflow.
 
 Set `VITE_API_URL` in a local `.env` file to use a different backend API URL. See `.env.example`.
 
-The backend does not enable CORS. Browsers block requests between separate frontend and backend origins, so the deployed frontend must use a same-origin API proxy for API calls to work. Authentication cookies are sent with credentialed requests and are never read by JavaScript.
+The backend allows credentialed CORS requests from frontend origins. Set `VITE_API_URL` to the active backend's `/api/v1` URL and redeploy after changing it. Authentication cookies are sent with credentialed requests and are never read by JavaScript.
 Paid appointment checkout requires Razorpay Test Mode keys in the backend environment (`RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET`).
 
 ## Available frontend flows

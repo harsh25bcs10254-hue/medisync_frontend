@@ -660,7 +660,7 @@ function Dashboard({ user, onSignOut }) {
           {availabilityError && <p className="form-error field-wide" role="alert">{availabilityError}</p>}
           {!availabilityLoading && !availabilityError && appointmentForm.doctorId && appointmentForm.scheduledDate && getAvailableAppointmentTimes(appointmentForm.scheduledDate, bookedSlots).length === 0 && <p className="empty-note field-wide">No appointment times are available on this date. Choose another date.</p>}
           <label className="field"><span>What would you like help with? <small>Optional</small></span><input type="text" maxLength={500} placeholder="A short reason for your visit" value={appointmentForm.reason} onChange={(event) => setAppointmentForm({ ...appointmentForm, reason: event.target.value })} /></label>
-          {doctors.length === 0 && !loading && <p className="empty-note">No doctors are available yet. Please check back later.</p>}
+          {doctors.length === 0 && !loading && <p className="empty-note">No doctors have been added yet. Ask a hospital administrator to add doctor accounts; their specialties will appear here.</p>}
           <p className="form-disclaimer field-wide"><Icon name="shield" size={15} /> Your appointment is confirmed only after Razorpay verifies successful payment. Unfinished checkout reservations expire after 10 minutes; no payment is due for a free appointment.</p>
           <button className="submit-button workspace-submit" type="submit" disabled={busy || loading || availabilityLoading || Boolean(availabilityError) || doctors.length === 0 || !appointmentForm.scheduledTime}><span>{busy ? 'Please wait…' : 'Continue to payment'}</span><Icon name="arrow" size={18} /></button>
         </form>
